@@ -94,6 +94,7 @@ def exec_github():
 
 
 def main():
+    pass
     """
         この部分"ReadJSONL.do(); PickleJSONL.do(jsonl_obj)"はできれば実行したくない 初期パッチ
         - jsonl_obj = ReadJSONL.do(GITHUB_JSONL_PATH)
@@ -103,7 +104,16 @@ def main():
         - jsonl_obj = ReadJSONL.do(GOLD_JSONL_PATH)
         - PickleJSONL.to_gold(jsonl_obj)
     """
-    exec_github()
+ 
+
+    """
+        - goldのASTを全て作成
+        exec_gold()
+    """
+    """
+        - githubのASTを全て作成
+        exec_github()
+    """
 
     
 
