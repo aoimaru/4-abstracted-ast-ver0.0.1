@@ -35,7 +35,11 @@ class BaseAST(object):
 
 class Recursive(object):
     @staticmethod
-    def do(obj):
+    def read(obj):
+        """
+            - シンプルな再帰
+            - 深さ優先探索を行う
+        """
         def rec(now):
             print(now["type"])
             if now["children"]:
@@ -43,16 +47,36 @@ class Recursive(object):
                     rec(nxt)
         rec(obj)
 
+    @staticmethod
+    def do(obj):
+        """
+            - シンプルな再帰
+            - 深さ優先探索を行う
+        """
+        tokens = list()
+        def rec(now, tp=""):
+            # print(now["children"])
+            if now["children"]:
+                for nxt in now["children"]:
+                    rec(nxt, now["type"])
+            else:
+                tokens.append("{} {}".format(tp, now["type"]))
+        rec(obj, tp="")
+        
+        for token in tokens:
+            print(token)
 
 
 def test():
     TEST_INDEX = 0
     file_sha = MetaData.get_sha()
     ast_obj = BaseAST(file_sha[TEST_INDEX])
+    print(file_sha[TEST_INDEX])
     children = ast_obj.children
     for child in children:
         print()
-        Recursive.do(child)
+        if child["type"] == "DOCKER-RUN":
+            Recursive.do(child)
 
 
 
