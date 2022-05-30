@@ -2,6 +2,8 @@ import json
 import pprint
 import pathlib
 
+import copy
+
 """
     - 定数周り
 """
@@ -48,7 +50,7 @@ class Recursive(object):
         rec(obj)
 
     @staticmethod
-    def do(obj):
+    def did(obj):
         """
             - シンプルな再帰
             - 深さ優先探索を行う
@@ -58,10 +60,32 @@ class Recursive(object):
             # print(now["children"])
             if now["children"]:
                 for nxt in now["children"]:
-                    rec(nxt, now["type"])
+                    rec(nxt, tp+" "+now["type"])
             else:
                 tokens.append("{} {}".format(tp, now["type"]))
         rec(obj, tp="")
+        
+        for token in tokens:
+            print(token)
+    
+    @staticmethod
+    def do(obj):
+        """
+            - シンプルな再帰
+            - 深さ優先探索を行う
+        """
+        tokens = list()
+        def rec(now, tp=list()):
+            # print(now["children"])
+            if now["children"]:
+                for nxt in now["children"]:
+                    ntp = copy.copy(tp)
+                    ntp.append(now["type"])
+                    rec(nxt, ntp)
+            else:
+                tp.append(now["type"])
+                tokens.append(tp)
+        rec(obj, tp=list())
         
         for token in tokens:
             print(token)
@@ -69,9 +93,10 @@ class Recursive(object):
 
 def test():
     TEST_INDEX = 0
-    file_sha = MetaData.get_sha()
-    ast_obj = BaseAST(file_sha[TEST_INDEX])
-    print(file_sha[TEST_INDEX])
+    # file_sha = MetaData.get_sha()
+    # ast_obj = BaseAST(file_sha[TEST_INDEX])
+    # パッチ
+    ast_obj = BaseAST("0b15d39cebd7afc18eded9d4f41d932b00770eed")
     children = ast_obj.children
     for child in children:
         print()
