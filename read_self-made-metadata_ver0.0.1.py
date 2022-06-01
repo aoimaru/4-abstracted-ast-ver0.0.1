@@ -1,3 +1,9 @@
+
+"""
+    - これいらないかも
+    - 使ってない
+"""
+
 import json
 import pprint
 import pathlib
