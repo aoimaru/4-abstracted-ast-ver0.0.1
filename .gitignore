@@ -167,7 +167,8 @@ cython_debug/
 
 self-made-datasets/
 
-original-datasets/
+original-datasets/*
 
 self-made-pickle/github/
 self-made-pickle/gold/
+self-made-model/
