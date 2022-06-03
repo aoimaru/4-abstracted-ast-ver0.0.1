@@ -70,13 +70,13 @@ class D2V(object):
         alpha = 0.025
         alpha_delta = 0.001
 
-        los_vals = []
+        # los_vals = []
         for epoch in range(epochs):
             print("Epoch: {}".format(epoch + 1))
             model.alpha, model.min_alpha = alpha, alpha
             model.train(documents, total_examples=model.corpus_count, epochs=model.iter)
             alpha -= alpha_delta
-            los_vals.append(model.get_latest_training_loss())
+            # los_vals.append(model.get_latest_training_loss())
         
         model.save(model_name)
             
@@ -91,6 +91,21 @@ class TR(object):
         trs = dict()
         for hg, child in enumerate(children):
             tokens = Recursive.do(child)
+            for wd, token in enumerate(tokens):
+                tr = {
+                    "{}:{}:{}".format(ast_obj.file_sha, hg, wd) : token
+                }
+                trs.update(tr)
+        return trs
+    
+    @staticmethod
+    def do_with_run(ast_obj):
+        children = ast_obj.children
+        if not children:
+            return None
+        trs = dict()
+        for hg, child in enumerate(children):
+            tokens = Recursive.do_with_run(child)
             for wd, token in enumerate(tokens):
                 tr = {
                     "{}:{}:{}".format(ast_obj.file_sha, hg, wd) : token
@@ -125,6 +140,37 @@ class Recursive(object):
         rec(obj, tp=list())
         
         return tokens
+
+    @staticmethod
+    def do_with_run(obj):
+        """
+            - シンプルな再帰
+            - 深さ優先探索を行う
+            - ASTをDoc2Vecで受け入れられる最低限の形に持っていく
+            - runのみを取得
+        """
+        tokens = list()
+        def rec(now, tp=list()):
+            # print(now["children"])
+            if now["children"]:
+                for nxt in now["children"]:
+                    ntp = copy.copy(tp)
+                    ntp.append(now["type"])
+                    rec(nxt, ntp)
+            else:
+                tp.append(now["type"])
+                tokens.append(tp)
+        rec(obj, tp=list())
+        
+        ZERO = 0
+        res = list()
+        for token in tokens:
+            if token[ZERO] == "DOCKER-RUN":
+                res.append(token[2:])
+        
+        return res
+            
+
 
 class MetaData(object):
     @staticmethod
@@ -176,46 +222,22 @@ class BaseAST(object):
         return self._file_sha
     
 
-def create_github_training_data() -> dict:
-    file_sha = MetaData.get_sha()
-    tr_data = dict()
-    for sha in file_sha:
-        ast_obj = BaseAST(sha)
-        trs = TR.do(ast_obj)
-        if trs:
-            tr_data.update(trs)
-    return tr_data
-
-def check_num_of_gold_word():
+def test():
     tr_data = dict()
     file_sha = MetaData.patch()
     for sha in file_sha:
         ast_obj = BaseAST(sha)
-        trs = TR.do(ast_obj)
+        trs = TR.do_with_run(ast_obj)
         if trs:
             tr_data.update(trs)
     
-    cnt = 0
-    for tr in tr_data.values():
-        cnt += len(tr)
-
-    print(cnt)
-
-def create_gold_training_data() -> dict:
-    tr_data = dict()
-    file_sha = MetaData.patch()
-    for sha in file_sha:
-        ast_obj = BaseAST(sha)
-        trs = TR.do(ast_obj)
-        if trs:
-            tr_data.update(trs)
-
     return tr_data
 
+
+
 def main():
-    tr_data = create_gold_training_data()
-    # file_sha = MetaData.get_sha()
-    D2V.epoch(tr_data, min_count=100, dm=1, window=5, name="default", epochs=20, types="gold")
+    tr_data = test()
+    D2V.epoch(tr_data, min_count=100, dm=1, window=5, name="run", types="gold", epochs=20)
     
     
     

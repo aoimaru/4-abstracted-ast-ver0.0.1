@@ -12,6 +12,10 @@ from gensim.models.doc2vec import TaggedDocument
 
 
 GOLD_DBOW_PATH = "./self-made-model/gold/dbow/default_2022-06-02 21:33:08.518763.model"
+GOLD_DMPV_PATH = "./self-made-model/gold/dmpv/default_2022-06-03 01:54:52.150092.model"
+GOLD_DMPV_RUN_PATH = "./self-made-model/gold/dmpv/run_2022-06-03 02:53:25.816957.model"
+GOLD_DMPV_EPOCH_20_RUN_PATH = "./self-made-model/gold/dmpv/epoch-20_run_2022-06-04 00:05:10.647523.model"
+
 
 METADATA_SHA_PATH = "./self-made-metadata/created/2022:05:21:22:32:53:0b-deduplicated-dockerfile-sources-sha"
 SELF_MADE_DATASETS_GOLD_PATH = "./self-made-datasets/gold/"
@@ -77,18 +81,16 @@ class D2V():
 
             for key, value in trs.items():
                 if key == "{}:{}:{}".format(sha, hgs, wds):
-                    print(value)
+                    print(value[2:])
 
 
-
-
-
-        model = Doc2Vec.load(GOLD_DBOW_PATH)
-        words = ["SC-APT-GET-INSTALL"]
+        model = Doc2Vec.load(GOLD_DMPV_RUN_PATH)
+        # words = ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-WITH-JAVA-HOME', 'BASH-LITERAL']
+        words = ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-RM', 'SC-RM-F-FORCE']
         x = model.infer_vector(words)
         most_similar_texts = model.docvecs.most_similar([x])
         for similar_text in most_similar_texts:
-            # print(similar_text)
+            print(similar_text[1], " : ", similar_text[0])
             op(similar_text[0])
 
 
