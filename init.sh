@@ -1,16 +1,17 @@
 #!/bin/sh
 
 DICS=(
-    "./original-datasets"
-    "./self-made-metadata/created"
-    "./self-made-metadata/original"
-    "./self-made-model/github"
-    "./self-made-model/gold"
-    "./self-made-pickle/github"
-    "./self-made-pickle/gold"
-    "./self-made-datasets/github"
-    "./self-made-datasets/gold"
-    "./self-made-datasets/origin"
+    "${PWD}/original-datasets"
+    "${PWD}/self-made-metadata/created"
+    "${PWD}/self-made-metadata/original"
+    "${PWD}/self-made-model/github"
+    "${PWD}/self-made-model/gold"
+    "${PWD}/self-made-pickle/github"
+    "${PWD}/self-made-pickle/gold"
+    "${PWD}/self-made-datasets/github"
+    "${PWD}/self-made-datasets/gold"
+    "${PWD}/self-made-datasets/origin"
+    "${PWD}/sample"
 )
 
 
