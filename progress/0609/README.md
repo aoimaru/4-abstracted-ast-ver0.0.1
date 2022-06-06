@@ -120,6 +120,41 @@
         "type": "DOCKER-RUN"
 
 
+
+
+
+                    {
+                        "children": [],
+                        "type": "SC-APT-GET-UPDATE"
+                    },
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "type": "SC-APT-GET-F-YES"
+                            },
+                            {
+                                "children": [],
+                                "type": "SC-APT-GET-F-NO-INSTALL-RECOMMENDS"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "type": "SC-APT-GET-PACKAGE:CA-CERTIFICATES"
+                                    },
+                                    {
+                                        "children": [],
+                                        "type": "SC-APT-GET-PACKAGE:P11-KIT"
+                                    }
+                                ],
+                                "type": "SC-APT-GET-PACKAGES"
+                            }
+                        ],
+                        "type": "SC-APT-GET-INSTALL"
+                    },
+
+
     ['SC-SET', 'SC-SET-F-E']
     ['SC-SET', 'SC-SET-F-U']
     ['SC-SET', 'SC-SET-F-X']

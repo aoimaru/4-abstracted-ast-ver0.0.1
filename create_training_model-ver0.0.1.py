@@ -215,7 +215,7 @@ def create_gold_training_data() -> dict:
 def main():
     tr_data = create_gold_training_data()
     # file_sha = MetaData.get_sha()
-    D2V.epoch(tr_data, min_count=100, dm=1, window=5, name="default", epochs=20, types="gold")
+    D2V.do(tr_data, min_count=100, dm=0, window=5, name="run", types="gold")
     
     
     

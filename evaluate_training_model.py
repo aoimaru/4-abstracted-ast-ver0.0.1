@@ -15,6 +15,7 @@ GOLD_DBOW_PATH = "./self-made-model/gold/dbow/default_2022-06-02 21:33:08.518763
 GOLD_DMPV_PATH = "./self-made-model/gold/dmpv/default_2022-06-03 01:54:52.150092.model"
 GOLD_DMPV_RUN_PATH = "./self-made-model/gold/dmpv/run_2022-06-03 02:53:25.816957.model"
 GOLD_DMPV_EPOCH_20_RUN_PATH = "./self-made-model/gold/dmpv/epoch-20_run_2022-06-04 00:05:10.647523.model"
+GOLD_DBOW_RUN_PATH = "./self-made-model/gold/dbow/run_2022-06-07 02:03:39.770506.model"
 
 
 METADATA_SHA_PATH = "./self-made-metadata/created/2022:05:21:22:32:53:0b-deduplicated-dockerfile-sources-sha"
@@ -84,15 +85,19 @@ class D2V():
                     print(value[2:])
 
 
-        model = Doc2Vec.load(GOLD_DMPV_RUN_PATH)
+        model = Doc2Vec.load(GOLD_DBOW_RUN_PATH)
         # words = ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-WITH-JAVA-HOME', 'BASH-LITERAL']
         # words = ['SC-RM', 'SC-RM-F-FORCE']
         # words = ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS']
         # words = ["SC-APK-F-NO-CACHE"]
         # words = ["SC-PIP-INSTALL"]
-        # words = ["SC-CURL", "SC-CURL-URL", "BASH-LITERAL", "ABS-PROBABLY-URL"]
+        words = ["SC-CURL", "SC-CURL-URL", "BASH-LITERAL", "ABS-PROBABLY-URL"]
         # words = ["SC-PIP-INSTALL"]
-        words = ["SC-APK-F-NO-CACHE"]
+        # words = ["SC-APK-F-NO-CACHE"]
+        # words = ["SC-APT-GET-UPDATE"]
+        # words = ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES']
+        # words = ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS']
+        # words = ['SC-APT-GET-INSTALL', 'SC-APT-GET-PACKAGES', 'SC-APT-GET-PACKAGE:CA-CERTIFICATES']
         x = model.infer_vector(words)
         most_similar_texts = model.docvecs.most_similar([x])
         for similar_text in most_similar_texts:
