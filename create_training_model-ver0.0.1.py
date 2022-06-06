@@ -99,8 +99,20 @@ class TR(object):
         return trs
                  
     @staticmethod
-    def does():
-        pass
+    def patch(ast_obj):
+        children = ast_obj.children
+        if not children:
+            return None
+        trs = dict()
+        for hg, child in enumerate(children):
+            if child["type"] == "DOCER-RUN":
+                tokens = Recursive.do(child)
+                for wd, token in enumerate(tokens):
+                    tr = {
+                        "{}:{}:{}".format(ast_obj.file_sha, hg, wd) : token
+                    }
+                    trs.update(tr)
+        return trs
 
 
 class Recursive(object):
@@ -212,10 +224,22 @@ def create_gold_training_data() -> dict:
 
     return tr_data
 
+def create_gold_run_training_data() -> dict:
+    tr_data = dict()
+    file_sha = MetaData.patch()
+    for sha in file_sha:
+        ast_obj = BaseAST(sha)
+        trs = TR.patch(ast_obj)
+        if trs:
+            tr_data.update(trs)
+
+    return tr_data
+
+
 def main():
     tr_data = create_gold_training_data()
     # file_sha = MetaData.get_sha()
-    D2V.do(tr_data, min_count=100, dm=0, window=5, name="run", types="gold")
+    D2V.do(tr_data, min_count=100, dm=0, window=5, name="dbow_run", types="gold")
     
     
     
