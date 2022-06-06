@@ -86,10 +86,13 @@ class D2V():
 
         model = Doc2Vec.load(GOLD_DMPV_RUN_PATH)
         # words = ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-WITH-JAVA-HOME', 'BASH-LITERAL']
-        words = ['SC-RM', 'SC-RM-F-FORCE']
+        # words = ['SC-RM', 'SC-RM-F-FORCE']
         # words = ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS']
         # words = ["SC-APK-F-NO-CACHE"]
         # words = ["SC-PIP-INSTALL"]
+        # words = ["SC-CURL", "SC-CURL-URL", "BASH-LITERAL", "ABS-PROBABLY-URL"]
+        # words = ["SC-PIP-INSTALL"]
+        words = ["SC-APK-F-NO-CACHE"]
         x = model.infer_vector(words)
         most_similar_texts = model.docvecs.most_similar([x])
         for similar_text in most_similar_texts:
