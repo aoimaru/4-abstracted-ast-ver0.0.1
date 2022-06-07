@@ -4,6 +4,7 @@ from gensim.models import KeyedVectors
 W2V_SG_GOLD_MODEL_PATH = "./self-made-word2vec/gold/sg/default_2022-06-08 01:23:23.927263.model"
 W2V_CBOW_GOLD_MODEL_PATH = "./self-made-word2vec/gold/cbow/default_2022-06-08 01:23:39.405964.model"
 
+W2V_CBOW_GITHUB_MODEL_PATH = "./self-made-word2vec/github/cbow/default_2022-06-08 02:39:57.235883.model"
 
 from collections import defaultdict
 from gensim.models.keyedvectors import KeyedVectors
@@ -24,7 +25,7 @@ class W2V(object):
 def main():
     pass
     # W2V.load()
-    model = word2vec.Word2Vec.load(W2V_SG_GOLD_MODEL_PATH)
+    model = word2vec.Word2Vec.load(W2V_CBOW_GITHUB_MODEL_PATH)
     vocab = list(model.wv.vocab.keys())
     vectors = [model.wv[word] for word in vocab]
     n_clusters = 15

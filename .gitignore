@@ -172,3 +172,8 @@ original-datasets/*.jsonl
 self-made-pickle/github/
 self-made-pickle/gold/
 self-made-model/
+
+self-made-model/github/cbow
+self-made-model/github/sg
+self-made-model/gold/cbow
+self-made-model/gold/sg

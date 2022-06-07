@@ -297,7 +297,7 @@ def patches():
 
 def main():
     training_data = patches()
-    W2V.do(corpus=training_data, sg=0, size=100, min_count=100, window=5, name="default", types="github")
+    W2V.do(corpus=training_data, sg=1, size=100, min_count=100, window=5, name="default", types="github")
 
     
 
