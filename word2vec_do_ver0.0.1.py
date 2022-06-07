@@ -24,6 +24,8 @@ SELF_MADE_DATASETS_ORIGIN_PATH = "./self-made-datasets/origin/"
 PATCH_GLOB_SELF_MADE_DATASETS_GOLD_PATH = "./self-made-datasets/gold/**"
 
 
+
+
 class D2V(object):
     @staticmethod
     def do(training_data, min_count=100, dm=1, window=5, name="default", types="github"):
@@ -92,27 +94,28 @@ class TR(object):
         for hg, child in enumerate(children):
             tokens = Recursive.do(child)
             for wd, token in enumerate(tokens):
-                tr = {
-                    "{}:{}:{}".format(ast_obj.file_sha, hg, wd) : token
-                }
-                trs.update(tr)
-        return trs
+                print(token)
+        #         tr = {
+        #             "{}:{}:{}".format(ast_obj.file_sha, hg, wd) : token
+        #         }
+        #         trs.update(tr)
+        # return trs
                  
     @staticmethod
     def patch(ast_obj):
         children = ast_obj.children
         if not children:
             return None
-        trs = dict()
-        for hg, child in enumerate(children):
-            if child["type"] == "DOCER-RUN":
+        tr_data = list()
+        for child in children:
+            if child["type"] == "DOCKER-RUN":
                 tokens = Recursive.do(child)
-                for wd, token in enumerate(tokens):
-                    tr = {
-                        "{}:{}:{}".format(ast_obj.file_sha, hg, wd) : token
-                    }
-                    trs.update(tr)
-        return trs
+                words = list()
+                for token in tokens:
+                    words.extend(token[2:])
+                tr_data.append(words)
+        return tr_data
+        
 
 
 class Recursive(object):
@@ -186,7 +189,31 @@ class BaseAST(object):
     @file_sha.getter
     def file_sha(self):
         return self._file_sha
+
+
+from gensim.models import word2vec
+
+
+class W2V(object):
+    @staticmethod
+    def do(corpus, sg=1, size=100, min_count=100, window=5, name="default", types="github"):
+        current_time = datetime.now()
+        current_time_str = current_time.strftime('%Y-%m-%d-%H-%M-%S')
+        model = word2vec.Word2Vec(
+            corpus,
+            sg=sg,
+            size=size, 
+            min_count=min_count, 
+            window=window
+        )
+        if sg==1:
+            model_name = "./self-made-word2vec/{}/sg/{}_{}.model".format(types, name, current_time)
+        elif sg==0:
+            model_name = "./self-made-word2vec/{}/cbow/{}_{}.model".format(types, name, current_time)
+
+        model.save(model_name)
     
+
 
 def create_github_training_data() -> dict:
     file_sha = MetaData.get_sha()
@@ -235,18 +262,44 @@ def create_gold_run_training_data() -> dict:
 
     return tr_data
 
+def get_w2v_data(tr_data):
+    training_data = list()
+    for value in tr_data.values():
+        if value[0] == "DOCKER-RUN":
+            training_data.append(value[2:])
+    return training_data
+
+def patch():
+    file_sha = MetaData.patch()
+    training_data = list()
+    for sha in file_sha:
+        ast_obj = BaseAST(sha)
+        tr_data = TR.patch(ast_obj)
+        if tr_data:
+            for tr in tr_data:
+                if tr:
+                    if not tr[0] == "UNKNOWN":
+                        training_data.append(tr)
+    return training_data
+
+def patches():
+    file_sha = MetaData.get_sha()
+    training_data = list()
+    for sha in file_sha:
+        ast_obj = BaseAST(sha)
+        tr_data = TR.patch(ast_obj)
+        if tr_data:
+            for tr in tr_data:
+                if tr:
+                    if not tr[0] == "UNKNOWN":
+                        training_data.append(tr)
+    return training_data
 
 def main():
-    tr_data = create_gold_training_data()
-    # file_sha = MetaData.get_sha()
-    for key, value in tr_data.items():
-        print(key, value)
-    # D2V.do(tr_data, min_count=100, dm=0, window=5, name="dbow_run", types="gold")
-    
-    
-    
+    training_data = patches()
+    W2V.do(corpus=training_data, sg=0, size=100, min_count=100, window=5, name="default", types="github")
 
-
+    
 
 if __name__ == "__main__":
     main()

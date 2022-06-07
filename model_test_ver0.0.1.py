@@ -175,7 +175,7 @@ class D2V(object):
 class Test(object):
     @staticmethod
     def do():
-        d2v = D2V(GOLD_DBOW_RUN_PATH)
+        d2v = D2V(GOLD_DMPV_RUN_PATH)
         for test_case in TEST_CASES:
             print()
             print(test_case)
