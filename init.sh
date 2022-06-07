@@ -11,6 +11,10 @@ DICS=(
     "${PWD}/self-made-datasets/github"
     "${PWD}/self-made-datasets/gold"
     "${PWD}/self-made-datasets/origin"
+    "${PWD}/self-made-word2vec/gold/cbow"
+    "${PWD}/self-made-word2vec/gold/sg"
+    "${PWD}/self-made-word2vec/github/cbow"
+    "${PWD}/self-made-word2vec/github/sg"
     "${PWD}/sample"
 )
 
