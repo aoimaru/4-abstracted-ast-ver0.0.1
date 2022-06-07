@@ -34,10 +34,10 @@ def main():
     with open(MINED_RULES_EXAMPLE_PATH, mode="r") as f:
         objs = json.load(f)
     for idx, obj in enumerate(objs):
-        print("number: {}".format(idx+1))
+        # print("number: {}".format(idx+1))
         tokens = Recursive.do(obj)
         for token in tokens:
-            print(token)
+            print(token, ",")
 
 
 
