@@ -37,7 +37,7 @@ def main():
     model = word2vec.Word2Vec.load(W2V_SG_GITHUB_MODEL_PATH)
     vocab = list(model.wv.vocab.keys())
     vectors = [model.wv[word] for word in vocab]
-    n_clusters = 50
+    n_clusters = 10
     kmeans_model = KMeans(n_clusters=n_clusters, verbose=1, random_state=42, n_jobs=-1)
     kmeans_model.fit(vectors)
     
