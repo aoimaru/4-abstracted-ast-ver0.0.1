@@ -165,3 +165,168 @@
 ['SC-CONFIGURE-HTTP-CLIENT-BODY-TEMP-PATH', 'SC-CONFIGURE-HTTP-PROXY-TEMP-PATH', 'SC-CONFIGURE-HTTP-LOG-PATH', 'SC-CONFIGURE-ERROR-LOG-PATH', 'SC-CONFIGURE-PID-PATH', 'SC-CONFIGURE-LOCK-PATH', 'SC-CONFIGURE-LOCALSTATEDIR', 'SC-CONFIGURE-SBIN-PATH', 'SC-CONFIGURE-CONF-PATH', 'SC-CONFIGURE-HTTP-FASTCGI-TEMP-PATH', 'SC-CONFIGURE-HTTP-UWSGI-TEMP-PATH', 'SC-CONFIGURE-HTTP-SCGI-TEMP-PATH', 'SC-CONFIGURE-USER', 'SC-CONFIGURE-MANDIR']
 
 ```
+
+## 予備実験の結果
+```bash
+    aptGetUpdatePrecedesInstall
+    閾値:0.75
+    count: 36/36
+    100.0%
+    閾値:0.8
+    count: 36/36
+    100.0%
+    閾値:0.85
+    count: 36/36
+    100.0%
+    閾値:0.9
+    count: 36/36
+    100.0%
+    閾値:0.95
+    count: 36/36
+    100.0%
+    
+    aptGetInstallUseY
+    閾値:0.75
+    count: 35/35
+    100.0%
+    閾値:0.8
+    count: 35/35
+    100.0%
+    閾値:0.85
+    count: 35/35
+    100.0%
+    閾値:0.9
+    count: 35/35
+    100.0%
+    閾値:0.95
+    count: 35/35
+    100.0%
+
+    aptGetInstallRmAptLists-v1
+    閾値:0.75
+    count: 33/36
+    91.66666666666666%
+    閾値:0.8
+    count: 33/36
+    91.66666666666666%
+    閾値:0.85
+    count: 33/36
+    91.66666666666666%
+    閾値:0.9
+    count: 33/36
+    91.66666666666666%
+    閾値:0.95
+    count: 33/36
+    91.66666666666666%
+
+    aptGetInstallRmAptLists-v2
+    閾値:0.75
+    count: 33/36
+    91.66666666666666%
+    閾値:0.8
+    count: 33/36
+    91.66666666666666%
+    閾値:0.85
+    count: 33/36
+    91.66666666666666%
+    閾値:0.9
+    count: 33/36
+    91.66666666666666%
+    閾値:0.95
+    count: 33/36
+    91.66666666666666%
+
+    wgetUseHttpsUrl
+    閾値:0.75
+    count: 8/8
+    100.0%
+    閾値:0.8
+    count: 8/8
+    100.0%
+    閾値:0.85
+    count: 8/8
+    100.0%
+    閾値:0.9
+    count: 8/8
+    100.0%
+    閾値:0.95
+    count: 8/8
+    100.0%
+
+    curlUseHttpsUrl
+    閾値:0.65
+    count: 23/29
+    79.3103448275862%
+    閾値:0.7
+    count: 23/29
+    79.3103448275862%
+    閾値:0.75
+    count: 23/29
+    79.3103448275862%
+    閾値:0.8
+    count: 23/29
+    79.3103448275862%
+    閾値:0.85
+    count: 23/29
+    79.3103448275862%
+    閾値:0.9
+    count: 23/29
+    79.3103448275862%
+    閾値:0.95
+    count: 23/29
+    79.3103448275862%
+
+    aptGetInstallUseNoRec
+    閾値:0.75
+    count: 32/36
+    88.88888888888889%
+    閾値:0.8
+    count: 32/36
+    88.88888888888889%
+    閾値:0.85
+    count: 32/36
+    88.88888888888889%
+    閾値:0.9
+    count: 32/36
+    88.88888888888889%
+    閾値:0.95
+    count: 32/36
+    88.88888888888889%
+
+    apkAddUseNoCache
+    閾値:0.75
+    count: 74/74
+    100.0%
+    閾値:0.8
+    count: 74/74
+    100.0%
+    閾値:0.85
+    count: 74/74
+    100.0%
+    閾値:0.9
+    count: 74/74
+    100.0%
+    閾値:0.95
+    count: 74/74
+    100.0%
+
+    tarSomethingRmTheSomething
+    閾値:0.75
+    count: 15/15
+    100.0%
+    閾値:0.8
+    count: 15/15
+    100.0%
+    閾値:0.85
+    count: 15/15
+    100.0%
+    閾値:0.9
+    count: 15/15
+    100.0%
+    閾値:0.95
+    count: 15/15
+    100.0%
+
+
+
+```

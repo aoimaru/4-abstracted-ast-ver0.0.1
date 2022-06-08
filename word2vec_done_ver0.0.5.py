@@ -231,6 +231,7 @@ class W2V(object):
 
 
 def test1():
+    print("aptGetUpdatePrecedesInstall")
     test_case = [
         ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
         ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS'],
@@ -250,26 +251,7 @@ def test1():
     W2V.test(test_case, "SC-APT-GET-UPDATE", 0.95)
 
 def test2():
-    test_case = [
-        ['SC-APT-GET-UPDATE'],
-        # ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
-        ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS'],
-        ['SC-APT-GET-INSTALL', 'SC-APT-GET-PACKAGES', 'SC-APT-GET-PACKAGE:LIBNSS-WRAPPER']
-    ]
-
-    
-    print("閾値:{}".format(0.75))
-    W2V.test(test_case, "SC-APT-GET-F-YES", 0.75)
-    print("閾値:{}".format(0.80))
-    W2V.test(test_case, "SC-APT-GET-F-YES", 0.80)
-    print("閾値:{}".format(0.85))
-    W2V.test(test_case, "SC-APT-GET-F-YES", 0.85)
-    print("閾値:{}".format(0.90))
-    W2V.test(test_case, "SC-APT-GET-F-YES", 0.90)
-    print("閾値:{}".format(0.95))
-    W2V.test(test_case, "SC-APT-GET-F-YES", 0.95)
-
-def test2():
+    print("aptGetInstallUseY")
     test_case = [
         ['SC-APT-GET-UPDATE'],
         # ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
@@ -290,6 +272,7 @@ def test2():
     W2V.test(test_case, "SC-APT-GET-F-YES", 0.95)
 
 def test3():
+    print("aptGetInstallRmAptLists-v1")
     test_case = [
         ['SC-APT-GET-UPDATE'],
         ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
@@ -310,6 +293,7 @@ def test3():
     W2V.test(test_case, "SC-RM", 0.95)
 
 def test4():
+    print("aptGetInstallRmAptLists-v2")
     test_case = [
         ['SC-APT-GET-UPDATE'],
         ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
@@ -331,6 +315,7 @@ def test4():
 
 
 def test5():
+    print("wgetUseHttpsUrl")
     test_case = [
         ['SC-WGET', 'SC-WGET-OUTPUT-DOCUMENT', 'BASH-PATH', 'BASH-LITERAL'],
         ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-PROBABLY-URL'],
@@ -349,6 +334,7 @@ def test5():
     W2V.test(test_case, "ABS-URL-PROTOCOL-HTTPS", 0.95)
 
 def test6():
+    print("configureUseBuildFlag")
     test_case = [
         # ['SC-CONFIGURE', 'SC-CONFIGURE-BUILD', 'BASH-LITERAL']
         ['SC-CONFIGURE', 'SC-CONFIGURE-WITH-CONFIG-FILE-PATH', 'BASH-LITERAL'],
@@ -371,6 +357,7 @@ def test6():
     W2V.test(test_case, "SC-CONFIGURE-BUILD", 0.95)
 
 def test7():
+    print("curlUseHttpsUrl")
     test_case = [
         ['SC-CURL', 'SC-CURL-URL', 'BASH-LITERAL', 'ABS-PROBABLY-URL'],
         # ['SC-CURL', 'SC-CURL-URL', 'BASH-LITERAL', 'ABS-URL-PROTOCOL-HTTPS'],
@@ -395,6 +382,7 @@ def test7():
     W2V.test(test_case, "ABS-URL-PROTOCOL-HTTPS", 0.95)
 
 def test8():
+    print("aptGetInstallUseNoRec")
     test_case = [
         ['SC-APT-GET-UPDATE'],
         ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
@@ -416,6 +404,7 @@ def test8():
 
 
 def test9():
+    print("apkAddUseNoCache")
     test_case = [
         # ['SC-APK-ADD', 'SC-APK-F-NO-CACHE'],
         # ['SC-APK-ADD', 'SC-APK-F-NO-CACHE'],
@@ -437,6 +426,7 @@ def test9():
     W2V.test(test_case, "SC-APK-F-NO-CACHE", 0.95)
 
 def test10():
+    print("tarSomethingRmTheSomething")
     test_case = [
         ['SC-TAR', 'SC-TAR-X'],
         ['SC-TAR', 'SC-TAR-J'],
@@ -461,6 +451,14 @@ def test10():
     
 
 def main():
+    test1()
+    test2()
+    test3()
+    test4()
+    test5()
+    test7()
+    test8()
+    test9()
     test10()
 
 if __name__ == "__main__":
