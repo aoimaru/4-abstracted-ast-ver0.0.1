@@ -68,12 +68,25 @@ class BaseAST(object):
 def main():
     FILE_SHA_1 = "0aa1cd6a00cfe247f17e680d5e2c394b5f0d3edc"
     FILE_SHA_2 = "0b15d39cebd7afc18eded9d4f41d932b00770eed"
+    FILE_SHA_3 = "0b687ec4b2f490051a53d114bf64242580c32f28"
+    FILE_SHA_4 = "0b1975d451426f9858f59b812411970f4e2ac49c"
 
-    ast_obj = BaseAST(FILE_SHA_1)
+    ast_obj = BaseAST(FILE_SHA_3)
     children = ast_obj.children
     for child in children:
         if child["type"] == "DOCKER-RUN":
             tokens = Recursive.do(child)
+            print()
+            for token in tokens:
+                print(token[2:])
+    
+    print()
+    ast_obj = BaseAST(FILE_SHA_4)
+    children = ast_obj.children
+    for child in children:
+        if child["type"] == "DOCKER-RUN":
+            tokens = Recursive.do(child)
+            print()
             for token in tokens:
                 print(token[2:])
 

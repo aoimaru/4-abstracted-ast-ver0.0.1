@@ -1,0 +1,202 @@
+from gensim.models import word2vec
+from gensim.models import KeyedVectors
+
+import json
+import copy
+import pathlib
+import os
+from datetime import datetime
+import sys
+import glob
+
+import numpy as np
+
+from numpy import dot
+from numpy.linalg import norm
+
+W2V_SG_GOLD_MODEL_PATH = "./self-made-word2vec/gold/sg/default_2022-06-08 01:23:23.927263.model"
+W2V_CBOW_GOLD_MODEL_PATH = "./self-made-word2vec/gold/cbow/default_2022-06-08 01:23:39.405964.model"
+
+W2V_CBOW_GITHUB_MODEL_PATH = "./self-made-word2vec/github/cbow/default_2022-06-08 02:39:57.235883.model"
+W2V_SG_GITHUB_MODEL_PATH = "./self-made-word2vec/github/sg/default_2022-06-08 02:49:07.957679.model"
+
+LOAD8 = "./self-made-word2vec/github/sg/default_2022-06-08 02:49:07.957679.model"
+
+VECTOR_SIZE = 100
+
+"""
+    - goldルールのみのファイルパスを取得するためのパス
+"""
+PATCH_GLOB_SELF_MADE_DATASETS_GOLD_PATH = "./self-made-datasets/gold/**"
+
+
+from collections import defaultdict
+from gensim.models.keyedvectors import KeyedVectors
+from sklearn.cluster import KMeans
+
+SELF_MADE_DATASETS_GOLD_PATH = "./self-made-datasets/gold/"
+
+SELF_MADE_DATASETS_GITHUB_PATH = "./self-made-datasets/github/"
+SAMPLE_WORD2VEC_PATH = "./sample/word2vec/gold/"
+
+class Recursive(object):
+    @staticmethod
+    def do(obj):
+        """
+            - シンプルな再帰
+            - 深さ優先探索を行う
+            - ASTをDoc2Vecで受け入れられる最低限の形に持っていく
+        """
+        tokens = list()
+        def rec(now, tp=list()):
+            # print(now["children"])
+            if now["children"]:
+                for nxt in now["children"]:
+                    ntp = copy.copy(tp)
+                    ntp.append(now["type"])
+                    rec(nxt, ntp)
+            else:
+                tp.append(now["type"])
+                tokens.append(tp)
+        rec(obj, tp=list())
+        
+        return tokens
+
+class BaseAST(object):
+    def __init__(self, file_sha):
+        def exists() -> bool:
+            return os.path.exists(file_path)
+        file_path = "{}{}.json".format(SELF_MADE_DATASETS_GITHUB_PATH, file_sha); file_path = str(pathlib.Path(file_path).resolve())
+        if exists():
+            with open(file_path, mode="r") as f:
+                obj = json.load(f)
+        else:
+            obj = dict()
+        self._children = obj
+        self._file_sha = file_sha
+    @property
+    def children(self):
+        pass
+    
+    @children.getter
+    def children(self):
+        return self._children
+    
+    @property
+    def file_sha(self):
+        pass
+
+    @file_sha.getter
+    def file_sha(self):
+        return self._file_sha
+
+class MetaData(object):
+    @staticmethod
+    def get_sha():
+        with open(METADATA_SHA_PATH, mode="r") as f:
+            data = json.load(f)
+        return data["file_sha"]
+    
+    @staticmethod
+    def patch():
+        file_shas = list()
+        origins = [origin for origin in glob.glob(PATCH_GLOB_SELF_MADE_DATASETS_GOLD_PATH, recursive=True)]
+        for origin in origins:
+            base_name = os.path.basename(origin)
+            file_sha = base_name.replace(".json", "")
+            file_shas.append(file_sha)
+        return file_shas
+
+class W2V(object):
+    @staticmethod
+    def load(test_case):
+        model = word2vec.Word2Vec.load(W2V_SG_GITHUB_MODEL_PATH)
+        
+        subject = list()
+        for tc in test_case:
+            subject.extend(tc)
+
+        subject_vector = np.zeros(VECTOR_SIZE)
+        for sub in subject:
+            try:
+                sub_vec = model.wv[sub]
+            except Exception as e:
+                print(e)
+            else:
+                subject_vector += sub_vec
+
+        file_sha = MetaData.patch()
+        for sha in file_sha:
+            ast_obj = BaseAST(sha)
+            children = ast_obj.children
+            for child in children:
+                if child["type"] == "DOCKER-RUN":
+                    tokens = Recursive.do(child)
+                    test_vector = np.zeros(VECTOR_SIZE)
+                    for token in tokens:
+                        tars = token[2:]
+                        for tar in tars:
+                            try:
+                                tar_vec = model.wv[tar]
+                            except Exception as e:
+                                pass
+                                # print(e)
+                            else:
+                                test_vector += tar_vec
+
+                    result = dot(subject_vector, test_vector)/(norm(subject_vector)*norm(test_vector))
+                    if result > 0.9:
+                        print("result: ", result, ast_obj.file_sha)
+                        for token in tokens:
+                            print(token[2:])
+                        print()
+
+
+
+def main():
+    test_case = [
+        ['SC-RM', 'SC-RM-F-RECURSIVE'],
+        ['SC-RM', 'SC-RM-F-FORCE'],
+        ['SC-RM', 'SC-RM-PATHS', 'SC-RM-PATH', 'BASH-CONCAT', 'BASH-LITERAL', 'ABS-MAYBE-PATH'],
+        ['SC-RM', 'SC-RM-PATHS', 'SC-RM-PATH', 'BASH-CONCAT', 'BASH-LITERAL', 'ABS-APT-LISTS'],
+        ['SC-RM', 'SC-RM-PATHS', 'SC-RM-PATH', 'BASH-CONCAT', 'BASH-LITERAL', 'ABS-PATH-VAR'],
+        ['SC-RM', 'SC-RM-PATHS', 'SC-RM-PATH', 'BASH-CONCAT', 'BASH-LITERAL', 'ABS-PATH-ABSOLUTE'],
+        ['SC-RM', 'SC-RM-PATHS', 'SC-RM-PATH', 'BASH-CONCAT', 'BASH-GLOB', 'ABS-GLOB-STAR']
+    ]
+
+
+    test_case_2 = [
+        ['SC-APK-ADD', 'SC-APK-F-NO-CACHE'],
+        ['SC-APK-ADD', 'SC-APK-PACKAGES', 'SC-APK-PACKAGE:BASH'],
+        ['SC-APK-ADD', 'SC-APK-PACKAGES', 'SC-APK-PACKAGE:LESS'],
+        ['SC-APK-ADD', 'SC-APK-PACKAGES', 'SC-APK-PACKAGE:MYSQL-CLIENT']
+    ]
+
+    test_case_3 = [
+        ['SC-SET', 'SC-SET-F-E'],
+        ['SC-SET', 'SC-SET-F-X'],
+        ['SC-MKDIR', 'SC-MKDIR-F-PARENTS'],
+        ['SC-MKDIR', 'SC-MKDIR-PATHS', 'SC-MKDIR-PATH', 'BASH-LITERAL', 'ABS-MAYBE-PATH'],
+        ['SC-MKDIR', 'SC-MKDIR-PATHS', 'SC-MKDIR-PATH', 'BASH-LITERAL', 'ABS-PATH-VAR'],
+        ['SC-MKDIR', 'SC-MKDIR-PATHS', 'SC-MKDIR-PATH', 'BASH-LITERAL', 'ABS-PATH-ABSOLUTE'],
+        ['SC-CHOWN', 'SC-CHOWN-F-RECURSIVE'],
+        ['SC-CHOWN', 'SC-CHOWN-OWNER', 'BASH-LITERAL'],
+        ['SC-CHOWN', 'SC-CHOWN-PATHS', 'SC-CHOWN-PATH', 'BASH-LITERAL', 'ABS-MAYBE-PATH'],
+        ['SC-CHOWN', 'SC-CHOWN-PATHS', 'SC-CHOWN-PATH', 'BASH-LITERAL', 'ABS-PATH-VAR'],
+        ['SC-CHOWN', 'SC-CHOWN-PATHS', 'SC-CHOWN-PATH', 'BASH-LITERAL', 'ABS-PATH-ABSOLUTE']
+    ]
+
+    test_case_4 = [
+        ['SC-LN', 'SC-LN-F-SYMBOLIC'],
+        ['SC-LN', 'SC-LN-F-FORCE'],
+        ['SC-LN', 'SC-LN-TARGET', 'BASH-LITERAL'],
+        ['SC-LN', 'SC-LN-LINK', 'BASH-LITERAL', 'ABS-MAYBE-PATH'],
+        ['SC-LN', 'SC-LN-LINK', 'BASH-LITERAL', 'ABS-PATH-ROOT-DIR'],
+        ['SC-LN', 'SC-LN-LINK', 'BASH-LITERAL', 'ABS-PATH-ABSOLUTE']
+    ]
+
+    W2V.load(test_case_4)
+    
+
+if __name__ == "__main__":
+    main()
