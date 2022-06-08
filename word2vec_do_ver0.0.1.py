@@ -297,7 +297,10 @@ def patches():
 
 def main():
     training_data = patches()
-    W2V.do(corpus=training_data, sg=1, size=100, min_count=100, window=5, name="default", types="github")
+    # print(len(training_data))
+    W2V.do(corpus=training_data, sg=1, size=100, min_count=100, window=5, name="06082252", types="github")
+    file_sha = MetaData.get_sha()
+    print(len(file_sha))
 
     
 

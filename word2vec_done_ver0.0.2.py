@@ -11,6 +11,14 @@ from collections import defaultdict
 from gensim.models.keyedvectors import KeyedVectors
 from sklearn.cluster import KMeans
 
+
+"""
+    モデル内の単語をクラスタリング
+"""
+
+
+
+
 class W2V(object):
     @staticmethod
     def load():

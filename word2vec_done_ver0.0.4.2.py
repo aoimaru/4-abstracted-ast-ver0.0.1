@@ -112,7 +112,7 @@ class MetaData(object):
 class W2V(object):
     @staticmethod
     def load(test_case):
-        model = word2vec.Word2Vec.load(W2V_SG_GITHUB_MODEL_PATH_2)
+        model = word2vec.Word2Vec.load(W2V_CBOW_GITHUB_MODEL_PATH)
         
         subject = list()
         for tc in test_case:
@@ -151,16 +151,14 @@ class W2V(object):
                     except Exception as e:
                         print(e)
                     else:
-                        if result > 0.75:
+                        if result > 0.9:
                             count += 1
                             print("result: ", result, ast_obj.file_sha)
                             for token in tokens:
                                 print(token[2:])
                             print()
-        print("count:{}".format(count))        
-
-
-
+        print("count:{}".format(count))
+                    
 def main():
     test_case = [
         ['SC-RM', 'SC-RM-F-RECURSIVE'],
@@ -246,30 +244,7 @@ def main():
         ['SC-APK-ADD', 'SC-APK-PACKAGES', 'SC-APK-PACKAGE:OPENSSH-CLIENT']
     ]
 
-    test_case_11 = [
-        ['SC-CONFIGURE', 'SC-CONFIGURE-BUILD', 'BASH-LITERAL']
-        # ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-LIBDIR', 'BASH-LITERAL'],
-        # ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-PREFIX', 'BASH-PATH', 'BASH-LITERAL']
-        # ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-WITH-APR', 'BASH-LITERAL']
-        # ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-WITH-JAVA-HOME', 'BASH-LITERAL'],
-        # ['BASH-SUBSHELL', 'SC-CONFIGURE', 'SC-CONFIGURE-F-WITH-SSL']
-    ]
-
-    test_case_12 = [
-        ['BASH-SUBSHELL', 'SC-MAKE', 'SC-MAKE-JOBS', 'BASH-LITERAL', 'ABS-SINGLE-SPACE'],
-        ['BASH-SUBSHELL', 'SC-MAKE', 'SC-MAKE-TARGET', 'BASH-LITERAL']
-    ]
-
-    test_case_13 = [
-        ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-X'],
-        ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-Z']
-        # ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-FILE', 'BASH-PATH', 'BASH-LITERAL', 'ABS-EXTENSION-TAR'],
-        # ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-DIRECTORY', 'BASH-PATH', 'BASH-LITERAL', 'ABS-MAYBE-PATH'],
-        # ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-DIRECTORY', 'BASH-PATH', 'BASH-LITERAL', 'ABS-PATH-ABSOLUTE'],
-        # ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-STRIP-COMPONENTS', 'BASH-LITERAL']
-    ]
-
-    W2V.load(test_case_13)
+    W2V.load(test_case_10)
     
 
 if __name__ == "__main__":

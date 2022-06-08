@@ -14,6 +14,31 @@ SELF_MADE_DATASETS_GOLD_PATH = "./self-made-datasets/gold/"
 SELF_MADE_DATASETS_GITHUB_PATH = "./self-made-datasets/github/"
 SAMPLE_WORD2VEC_PATH = "./sample/word2vec/gold/"
 
+"""
+    - goldルールのみのファイルパスを取得するためのパス
+"""
+PATCH_GLOB_SELF_MADE_DATASETS_GOLD_PATH = "./self-made-datasets/gold/**"
+
+
+
+
+class MetaData(object):
+    @staticmethod
+    def get_sha():
+        with open(METADATA_SHA_PATH, mode="r") as f:
+            data = json.load(f)
+        return data["file_sha"]
+    
+    @staticmethod
+    def patch():
+        file_shas = list()
+        origins = [origin for origin in glob.glob(PATCH_GLOB_SELF_MADE_DATASETS_GOLD_PATH, recursive=True)]
+        for origin in origins:
+            base_name = os.path.basename(origin)
+            file_sha = base_name.replace(".json", "")
+            file_shas.append(file_sha)
+        return file_shas
+
 class Recursive(object):
     @staticmethod
     def do(obj):
@@ -64,31 +89,66 @@ class BaseAST(object):
     @file_sha.getter
     def file_sha(self):
         return self._file_sha
+
+def do(file_sha):
+    ast_obj = BaseAST(file_sha)
+    children = ast_obj.children
+    for child in children:
+        if child["type"] == "DOCKER-RUN":
+            tokens = Recursive.do(child)
+            print()
+            for token in tokens:
+                print(token[2:])
     
 def main():
-    FILE_SHA_1 = "0aa1cd6a00cfe247f17e680d5e2c394b5f0d3edc"
-    FILE_SHA_2 = "0b15d39cebd7afc18eded9d4f41d932b00770eed"
-    FILE_SHA_3 = "0b687ec4b2f490051a53d114bf64242580c32f28"
-    FILE_SHA_4 = "0b1975d451426f9858f59b812411970f4e2ac49c"
+    file_shas = MetaData.patch()
+    for file_sha in file_shas:
+        do(file_sha)
 
-    ast_obj = BaseAST(FILE_SHA_3)
-    children = ast_obj.children
-    for child in children:
-        if child["type"] == "DOCKER-RUN":
-            tokens = Recursive.do(child)
-            print()
-            for token in tokens:
-                print(token[2:])
+
+    # FILE_SHA_1 = "0aa1cd6a00cfe247f17e680d5e2c394b5f0d3edc"
+    # FILE_SHA_2 = "0b15d39cebd7afc18eded9d4f41d932b00770eed"
+    # FILE_SHA_3 = "0b687ec4b2f490051a53d114bf64242580c32f28"
+    # FILE_SHA_4 = "0b1975d451426f9858f59b812411970f4e2ac49c"
+
+    # ast_obj = BaseAST(FILE_SHA_1)
+    # children = ast_obj.children
+    # for child in children:
+    #     if child["type"] == "DOCKER-RUN":
+    #         tokens = Recursive.do(child)
+    #         print()
+    #         for token in tokens:
+    #             print(token[2:])
     
-    print()
-    ast_obj = BaseAST(FILE_SHA_4)
-    children = ast_obj.children
-    for child in children:
-        if child["type"] == "DOCKER-RUN":
-            tokens = Recursive.do(child)
-            print()
-            for token in tokens:
-                print(token[2:])
+    # print()
+    # ast_obj = BaseAST(FILE_SHA_2)
+    # children = ast_obj.children
+    # for child in children:
+    #     if child["type"] == "DOCKER-RUN":
+    #         tokens = Recursive.do(child)
+    #         print()
+    #         for token in tokens:
+    #             print(token[2:])
+    
+    # print()
+    # ast_obj = BaseAST(FILE_SHA_3)
+    # children = ast_obj.children
+    # for child in children:
+    #     if child["type"] == "DOCKER-RUN":
+    #         tokens = Recursive.do(child)
+    #         print()
+    #         for token in tokens:
+    #             print(token[2:])
+
+    # print()
+    # ast_obj = BaseAST(FILE_SHA_4)
+    # children = ast_obj.children
+    # for child in children:
+    #     if child["type"] == "DOCKER-RUN":
+    #         tokens = Recursive.do(child)
+    #         print()
+    #         for token in tokens:
+    #             print(token[2:])
 
 
 
