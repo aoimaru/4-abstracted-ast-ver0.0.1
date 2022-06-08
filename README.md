@@ -169,6 +169,15 @@
 ## 予備実験の結果
 ```bash
     aptGetUpdatePrecedesInstall
+
+    $テストケース
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-PACKAGES', 'SC-APT-GET-PACKAGE:LIBNSS-WRAPPER']
+
+    $期待する記述
+    ["SC-APT-GET-UPDATE"]
+
     閾値:0.75
     count: 36/36
     100.0%
@@ -184,8 +193,17 @@
     閾値:0.95
     count: 36/36
     100.0%
-    
+
     aptGetInstallUseY
+
+    $テストケース
+    ['SC-APT-GET-UPDATE'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-PACKAGES', 'SC-APT-GET-PACKAGE:LIBNSS-WRAPPER']
+
+    $期待する記述
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES']
+
     閾値:0.75
     count: 35/35
     100.0%
@@ -203,6 +221,16 @@
     100.0%
 
     aptGetInstallRmAptLists-v1
+
+    $テストケース
+    ['SC-APT-GET-UPDATE'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-YES'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-F-NO-INSTALL-RECOMMENDS'],
+    ['SC-APT-GET-INSTALL', 'SC-APT-GET-PACKAGES', 'SC-APT-GET-PACKAGE:LIBNSS-WRAPPER']
+
+    $期待する記述
+    ['SC-RM', 'SC-RM-PATHS', 'SC-RM-PATH', 'BASH-CONCAT', 'BASH-LITERAL', 'ABS-APT-LISTS']
+
     閾値:0.75
     count: 33/36
     91.66666666666666%
@@ -220,6 +248,14 @@
     91.66666666666666%
 
     aptGetInstallRmAptLists-v2
+
+    $テストケース
+    ['SC-WGET', 'SC-WGET-OUTPUT-DOCUMENT', 'BASH-PATH', 'BASH-LITERAL'],
+    ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-PROBABLY-URL'],
+
+    $期待する記述
+    ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-URL-PROTOCOL-HTTPS'],
+
     閾値:0.75
     count: 33/36
     91.66666666666666%

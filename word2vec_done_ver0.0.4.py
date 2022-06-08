@@ -279,7 +279,7 @@ def main():
         # ['BASH-AND-IF', 'BASH-AND-MEM', 'SC-TAR', 'SC-TAR-STRIP-COMPONENTS', 'BASH-LITERAL']
     ]
 
-    W2V.load(test_case_13)
+    W2V.load(test_case)
     
 
 if __name__ == "__main__":
