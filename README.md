@@ -249,12 +249,6 @@
 
     aptGetInstallRmAptLists-v2
 
-    $テストケース
-    ['SC-WGET', 'SC-WGET-OUTPUT-DOCUMENT', 'BASH-PATH', 'BASH-LITERAL'],
-    ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-PROBABLY-URL'],
-
-    $期待する記述
-    ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-URL-PROTOCOL-HTTPS'],
 
     閾値:0.75
     count: 33/36
@@ -273,6 +267,14 @@
     91.66666666666666%
 
     wgetUseHttpsUrl
+    
+    $テストケース
+    ['SC-WGET', 'SC-WGET-OUTPUT-DOCUMENT', 'BASH-PATH', 'BASH-LITERAL'],
+    ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-PROBABLY-URL'],
+
+    $期待する記述
+    ['SC-WGET', 'SC-WGET-URL', 'BASH-LITERAL', 'ABS-URL-PROTOCOL-HTTPS'],
+    
     閾値:0.75
     count: 8/8
     100.0%
